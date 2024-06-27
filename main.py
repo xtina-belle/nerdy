@@ -37,7 +37,8 @@ async def greet_user(request: web.Request) -> web.Response:
     return web.Response(text=f"Hello, {user}, {page_num}")
 
 
-app = web.Application(middlewares=[check_header])
+if __name__ == "__main__":
+    app = web.Application(middlewares=[check_header])
 
-app.add_routes(routes)
-web.run_app(app)
+    app.add_routes(routes)
+    web.run_app(app)
