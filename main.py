@@ -1,6 +1,12 @@
-from aiohttp import web
+import os
 from typing import Callable, Awaitable
 
+from aiohttp import web
+import redis
+
+
+r = redis.Redis(host=os.environ.get("REDISHOST"), port=os.environ.get("REDISPORT"),
+                password=os.environ.get("REDISPASSWORD"), username=os.environ.get("REDISUSER"))
 
 routes = web.RouteTableDef()
 
@@ -26,7 +32,8 @@ async def greet_user(request: web.Request) -> web.Response:
     # get data from the BODY of request
     data = await request.post()
     name = data.get("name", "")
-    return web.Response(text=f"hello, {name}")
+    city = r.get("Bahamas").decode("utf-8")
+    return web.Response(text=f"hello, {name} in {city}")
 
 
 @routes.get("/{username}")
